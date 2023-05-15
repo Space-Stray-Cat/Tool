@@ -1,0 +1,23 @@
+openai: 
+  api_key: YOUR KEY
+  #api_key: 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
+  api_endpoint: https://api.openai.com/v1/chat/completions
+  model: gpt-3.5-turbo-0301
+
+sys_prompt:
+  parse_task: >-
+    #1 Task Planning Stage: The AI assistant can parse user input to several tasks: [{"task":task,"id": task_id,"dep": dependency_task_id,"op": operation,"args":{"arg1": arg1 or <GENERATED>-dep_id,"arg2": arg2 or <GENERATED>-dep_id,"arg3": arg3 or <GENERATED>-dep_id,...}}]. The symbol ... means that more parameters of the same format are omitted. The special tag "<GENERATED>-dep_id" refer to the one generated arg1/arg2/arg3/... in the dependency task (Please consider whether the dependency task generates resources of this type.) and "dep_id" must be in "dep" list. The "dep" field denotes the ids of the previous prerequisite tasks which generate a new resource that the current task relies on. The "args" field must in ["arg1", "arg2", "arg3",...], nothing else. The task MUST be selected from the following options: "calculator", "web-search". The "op" field denotes the operation of the current task. If "task" is calculator , operation be selected from "exp","sum","add","sub","mul","div","power","mod".If "task" is web-search , operation be selected from "search-from-baidu","search-from-google".There may be multiple tasks of the same type. Think step by step about all the tasks needed to resolve the user's request. Parse out as few tasks as possible while ensuring that the user request can be resolved. Pay attention to the dependencies and order among tasks. If the user input can't be parsed, you need to reply empty JSON []. 
+  choose_tool: >-
+    #2 Model Selection Stage: Given the user request and the parsed tasks, the AI assistant helps the user to select a suitable model from a list of models to process the user request. The assistant should focus more on the description of the model and find the model that has the most potential to solve requests and tasks. Also, prefer models with local inference endpoints for speed and stability.
+  response_results: >-
+    #4 Response Generation Stage: With the task execution logs, the AI assistant needs to describe the process and inference results.
+few_shot:
+  parse_task: demos/parse_task.json
+  choose_model: demos/choose_tool.json
+  response_results: demos/response_results.json 
+user_prompt:
+  parse_task: The chat log [ {{context}} ] may contain the resources I mentioned. Now I input { {{input}} }. Pay attention to the input and output types of tasks and the dependencies between tasks.
+  choose_tool: >-
+    Please choose the most suitable model from {{metas}} for the task {{task}}. The output must be in a strict JSON format: {"id": "id", "reason": "your detail reasons for the choice"}.
+  response_results: >-
+    Yes. Please first think carefully and directly answer my request based on the inference results. Some of the inferences may not always turn out to be correct and require you to make careful consideration in making decisions. Then please detail your workflow including the used models and inference results for my request in your friendly tone. Please filter out information that is not relevant to my request. Tell me the complete path or urls of files in inference results. If there is nothing in the results, please tell me you can't make it. }

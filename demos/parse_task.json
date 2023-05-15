@@ -1,0 +1,19 @@
+[
+    {
+        "role": "user",
+        "content": "给你一个向量[4,5,10], 帮我计算下softmax结果"
+    },
+    {
+        "role": "assistant",
+        "content": "[{\"task\": \"calculator\", \"id\": 0, \"dep\": [-1], \"op\" : \"exp\",\"args\": {\"arg1\":[4,5,10]}}, {\"task\": \"calculator\", \"id\": 1, \"dep\": [0],\"op\" : \"sum\" ,\"args\": {\"arg1\": \"<GENERATED>-0\" }}, {\"task\": \"calculator\", \"id\": 2, \"dep\": [0,1], \"op\" : \"div\", \"args\": {\"arg1\": \"<GENERATED>-0\",\"arg2\" : \"<GENERATED>-1\"}} ]"
+    },
+    {
+        "role": "user",
+        "content": "给你一个几个数8,89,3, 帮我计算计算下和"
+    },
+    {
+        "role": "assistant",
+        "content": "[{\"task\": \"calculator\", \"id\": 0, \"dep\": [-1], \"op\" : \"add\",\"args\": {\"arg1\":8,\"arg2\":89}}, {\"task\": \"calculator\", \"id\": 1, \"dep\": [0],\"op\" : \"add\" ,\"args\": {\"arg1\": \"<GENERATED>-0\" ,\"arg2\": 3}} ]"
+    }
+
+]
